@@ -1,14 +1,14 @@
 class Battleships
-  
-  # This version of Battleships uses one general instance variable called @ships, 
+
+  # This version of Battleships uses one general instance variable called @ships,
   # which will allow for any board size up to 8, by changing the value of BOARD_SIZE.
-  
+
   BOARD_SIZE = 4
   NUMBER_OF_SHIPS = BOARD_SIZE - 1
-  
+
   # Not sure what to do about the fact that there are a finite number of these symbols.
   # But not sure who would want to play past an 8x8 board with 7 ships, either.
-  
+
   SHIP_SYMBOLS =  { 1 => "*",
                     2 => "@",
                     3 => "0",
@@ -17,26 +17,26 @@ class Battleships
                     6 => "$",
                     7 => "+"
                   }
-  
+
   # Same issue as above: finite number of letters.  Should this go past 8x8?
-  
+
   LETTERS = ["a", "b", "c", "d", "e", "f", "g", "h"]
-  
+
   @players_board = []
   @ships = []
   @winning_board = []
   @wins = []
   @win_requirement = nil
   @guess_limit = nil
-  
+
   def prompt
     puts
     print "> "
     response = gets.chomp.downcase
   end
-  
+
   # This function is the heart of the new @ships version of the game
-  
+
   def place_ships
     @ships = Array.new
     (0..NUMBER_OF_SHIPS - 1).each do |i|
@@ -51,18 +51,18 @@ class Battleships
         else
           puts "vertical"
           (0..ship_size - 1).each { |j| ship.push([y, x + j]) }
-        end        
+        end
         print ship; puts
       end
 #      print ship; puts
       @ships.push(ship)
     end
-#    print @ships; puts    
+#    print @ships; puts
   end
 
   # Below is the helper function that checks for overlaps in place_ships
   # Originally i had:
-  
+
   # def ship_overlaps?(new_ship)
   #   @ships.each do |ship|
   #     ship.each do |square|
@@ -80,7 +80,7 @@ class Battleships
   # Below is the second version of the helper function
   # It looked great but does not work!
   # Basically it compares an array of arrays of arrays to an array of arrays
-  
+
   # def ship_overlaps?(new_ship)
   #   !(@ships & new_ship).empty?
   # end
@@ -88,7 +88,7 @@ class Battleships
   # Below is the third version of the helper function
   # It does work - compares apples to apples, not the above problem
   # I'm wondering if it could be refactored to be better
-  
+
   def ship_overlaps?(new_ship)
     @ships.each do |ship|
       if !(ship & new_ship).empty?
@@ -97,7 +97,7 @@ class Battleships
     end
     false
   end
-  
+
   def create_winning_board
     @ships.each do |ship|
       ship.each do |coordinates|
@@ -107,7 +107,7 @@ class Battleships
   end
 
   # This was my first use of reduce
-  
+
   def set_win_and_tries_requirements
     @win_requirement = (1..NUMBER_OF_SHIPS).reduce(:+)
     @guess_limit = BOARD_SIZE ** 2 / 2
@@ -124,7 +124,7 @@ class Battleships
     create_winning_board
     set_win_and_tries_requirements
   end
-  
+
   def cheat
     (0..NUMBER_OF_SHIPS - 1).each do |i|
       print @ships[i]
@@ -133,10 +133,10 @@ class Battleships
   end
 
   # Everything above is done for the moment except refactoring creating the nil boards
-  
+
   # Everything else below is in the process of being debugged
   # It runs but the win condition is not met correctly - otherwise seems to work
-  
+
   def play
     setup_round
     puts
@@ -198,13 +198,13 @@ class Battleships
     end
     guess
   end
-  
+
   def translate(guess)
     guess = [LETTERS.index(guess[0]), guess[1].to_i - 1]
   end
 
   # Not sure about ship_size - whether it's necessary or useful
-      
+
   def hit_or_miss(guess)
     (0..NUMBER_OF_SHIPS - 1).each do |i|
       ship_size = NUMBER_OF_SHIPS - i
@@ -223,19 +223,19 @@ class Battleships
       end
     end
     puts
-    puts "Sorry, that shot was a miss."    
+    puts "Sorry, that shot was a miss."
   end
 
   def add_to_wins(guess, size)
     @wins.push(guess)
     @players_board[guess[0]][guess[1]] = SHIP_SYMBOLS[size]
   end
-    
+
   def show_board(board)
     puts
     letterline
     3.times{puts}
-    (0..BOARD_SIZE-1).each do |j|      
+    (0..BOARD_SIZE-1).each do |j|
       print "      "
       numbercolumn(j)
       (0..BOARD_SIZE-1).each do |i|
@@ -248,7 +248,7 @@ class Battleships
     letterline
     3.times{puts}
   end
-  
+
   def letterline
     print "             "
     (0..BOARD_SIZE-1).each do |i|
@@ -261,7 +261,7 @@ class Battleships
     print BOARD_SIZE - i
     print "      "
   end
-    
+
   def go_again?
     puts
     puts "Would you like to fire another shot? (y/n)"
@@ -274,8 +274,5 @@ class Battleships
     end
     true
   end
-  
-end
 
-new_game = Battleships.new
-new_game.play
+end
