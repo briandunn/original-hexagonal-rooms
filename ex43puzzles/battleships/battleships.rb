@@ -29,6 +29,22 @@ class Battleships
   @win_requirement = nil
   @guess_limit = nil
 
+  def initialize(stdin, stdout)
+    @stdin, @stdout = stdin, stdout
+  end
+
+  def gets
+    @stdin.gets
+  end
+
+  def puts(*args)
+    @stdout.puts(*args)
+  end
+
+  def print(*args)
+    @stdout.print(*args)
+  end
+
   def prompt
     puts
     print "> "
